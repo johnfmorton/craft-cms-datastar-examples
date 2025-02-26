@@ -1,0 +1,22 @@
+{% fragment %}
+    <div id="searchResults">
+        <h2 class="text-lg font-bold">Search results (show total)</h2>
+        <ul class="list-inside list-disc mt-1">
+            <li>Sample result for a search of <span class="font-bold">"{{ signals.phrase ?? '' }}"</span> in Craft CMS</li>
+        </ul>
+    </div>
+{% endfragment %}
+
+{% fragment %}
+{% dump(signals) %}
+    <pre id="debugger" class="p-5 {{ isPopstateEvent =='1' ? 'bg-red-400': 'bg-yellow-400' }}">
+        {{ 'signals.phrase: "' ~ signals.phrase  ~ '"' }}
+        {{ 'signals.get("phrase"): "' ~ signals.get("phrase")  ~ '"' }}
+        {{ 'signals.counter: "' ~ signals.counter  ~ '"' }}
+        {{ 'signals.get("counter"): "' ~ signals.get("counter")  ~ '"' }}
+    </pre>
+{% endfragment %}
+
+{% executescript %}
+    console.log('This is the "executescript" section of search-v1.twig');
+{% endexecutescript %}

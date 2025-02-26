@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Search</title>
+</head>
+<body>
+<div>
+    <h1>Datastar Test - v1 - basic search</h1>
+    <div id="container" data-signals="{ phrase: '', counter: 42 }">
+        <div id="wrapper" data-on-historychange="$phrase=evt.detail.phrase; $counter++;">
+            <div>
+                <div>
+                    <label for="phrase">Enter a phrase</label>
+                    <input type="text"
+                           name="phrase"
+                           id="phrase"
+                           placeholder="What are you looking for?"
+                           data-bind-phrase
+                           data-on-input__debounce.500ms="{{ datastar.get('_datastar/search-v1.twig', {isPopstateEvent: "0"}) }}"
+                           data-on-historychange__debounce.500ms="{{ datastar.get('_datastar/search-v1.twig', {isPopstateEvent: "1"}) }}"
+                    >
+                    <code>
+                        <pre style="background-color: yellow" data-text="ctx.signals.JSON()"></pre>
+                    </code>
+                </div>
+                <div>
+                    <div id="searchResults">
+                        <h2>Search results</h2>
+                        <ul>
+                            <li>results from _datastar/search-v1.twig will appear here</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div id="debugger">
+                    <span>
+                        debugging info will appear here from _datastar/search-v1    .twig
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        console.log('DOM fully loaded and parsed');
+      });
+    </script>
+</div>
+</body>
+</html>

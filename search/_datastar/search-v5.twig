@@ -1,0 +1,79 @@
+{% set sections = ['blog','savedLinks'] %}
+{% if signals.sections == '1' %}
+    {% set sections = "blog" %}
+{% endif %}
+{% if signals.sections == '2' %}
+    {% set sections = "savedLinks" %}
+{% endif %}
+
+{% set results = craft.entries()
+    .search(signals.phrase)
+    .orderBy('score')
+    .section(sections)
+    .collect() %}
+
+{% fragment %}
+    <div id="searchResults">
+
+        <h2 class="text-lg font-bold">Search results ({{ results | length }})</h2>
+        <ul class="list-none mt-1 flex flex-col space-y-2">
+            {% for result in results %}
+                <li class="block -indent-5 ml-5">
+                    {% if result.section == 'Blog' %}
+                        <a href="{{ result.url }}"><img src="/static/noun-text-document-4493166.svg" alt="Link icon" width="16px" height="16px"
+                             class="inline-block relative top-[-2px] pr-0"> <span  class="underline">{{ result.title }}</span></a>
+                    {% else %}
+                        <a href="{{ result.linkUrl }}" target="_blank"><img src="/static/noun-file-links-4493200.svg" alt="Link icon" width="16px" height="16px"
+                             class="inline-block relative top-[-2px] pr-0"> <span  class="underline">{{ result.title }}</span></a>
+                    {% endif %}
+                    </li>
+            {% endfor %}
+            {% if results | length == 0 %}
+                <li>No results found for <span class="font-bold">"{{ signals.phrase ?? '' }}"</span></li>
+            {% endif %}
+        </ul>
+    </div>
+{% endfragment %}
+
+{% fragment %}
+    <div id="debugger" class="p-5 {{ isPopstateEvent =='1' ? 'bg-red-400': 'bg-yellow-400' }}">
+        <pre>
+        results | length : {{ results | length }}
+   </pre>
+
+
+        {% if isPopstateEvent %}
+            Triggered by history state change, don't update the history via javascript.
+        {% else %}
+            {% if signals.phrase|length %}
+                Update URL query parameter to: <span
+                    class="font-mono font-bold bg-gray-50 px-1 inline-block text-sm rounded-sm">phrase={{ signals.phrase | trim | url_encode|replace({'%20': '+'}) }} </span>
+            {% else %}
+                Remove the query parameter  <span
+                    class="font-mono font-bold bg-gray-50 px-1 inline-block text-sm rounded-sm">phrase</span> from the URL
+            {% endif %}
+        {% endif %}
+    </div>
+{% endfragment %}
+
+{% executescript %}
+    const searchPhrase = "{{ signals.phrase ?? '' }}";
+    const sections = "{{ signals.sections }}";
+    const isPopstateEvent = "{{ isPopstateEvent ?? null }}";
+    const url = new URL(window.location.href);
+    if (searchPhrase.trim() !== '') {
+    url.searchParams.set('phrase', searchPhrase.trim());
+    url.searchParams.set('sections', sections);
+    } else {
+    // Remove the query parameter if the search phrase is empty
+    url.searchParams.delete('phrase');
+    url.searchParams.delete('sections');
+    }
+    console.log('isPopstateEvent', isPopstateEvent);
+    if (isPopstateEvent === '0' || isPopstateEvent === 'null') {
+    console.log('pushing state');
+    window.history.pushState({}, '', url);
+    // Update the title of the page
+    document.title = `Search: ${searchPhrase}`;
+    }
+{% endexecutescript %}
