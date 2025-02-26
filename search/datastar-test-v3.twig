@@ -67,6 +67,8 @@
         searchPhrase.addEventListener('input', (e) => {
           console.log('searchPhrase', e.target.value);
         });
+        // set focus on the search input
+        searchPhrase.focus();
 
         window.addEventListener('popstate', (event) => {
           isPopstateEvent = true;
@@ -75,6 +77,8 @@
           // the current URL already reflects the desired state.
           const currentUrl = new URL(window.location.href);
           const searchPhraseValue = currentUrl.searchParams.get('phrase') || '';
+
+
           // Update the input field without triggering another pushState.
           searchPhrase.value = searchPhraseValue;
 
@@ -87,7 +91,7 @@
           }, false);
 
           // Dispatch the custom event twice
-          // first, to change the state of value in DataStar
+          // first, to change the state of value in Datastar
           wrapperElement.dispatchEvent(historyChangeEvent);
           // second, to trigger the search
           searchPhrase.dispatchEvent(historyChangeEvent);
