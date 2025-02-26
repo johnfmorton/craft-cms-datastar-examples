@@ -4,12 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Search</title>
+    <style>
+        .bg-red-400 {
+            background-color: rgb(248 113 113) /* #f87171 */;
+        }
+
+        .bg-yellow-400 {
+            background-color: rgb(250 204 21) /* #facc15 */;
+        }
+
+        .whitespace-pre-line {
+            white-space: pre-line;
+        }
+    </style>
 </head>
 <body>
 <div>
     <h1>Datastar Test - v1 - basic search</h1>
     <div id="container" data-signals="{ phrase: '', counter: 42 }">
-        <div id="wrapper" data-on-historychange="$phrase=evt.detail.phrase; $counter++;">
+        <div id="wrapper">
             <div>
                 <div>
                     <label for="phrase">Enter a phrase</label>
@@ -20,9 +33,8 @@
                            data-bind-phrase
                            data-on-input__debounce.500ms="{{ datastar.get('_datastar/search-v1.twig') }}"
                     >
-                    <code>
-                        <pre style="background-color: yellow" data-text="ctx.signals.JSON()"></pre>
-                    </code>
+                    <pre>ctx.signals:</pre>
+                    <pre style="background-color: yellow" data-text="ctx.signals.JSON()"></pre>
                 </div>
                 <div>
                     <div id="searchResults">
@@ -32,12 +44,9 @@
                         </ul>
                     </div>
                 </div>
-
-                <div id="debugger">
-                    <span>
-                        debugging info will appear here from _datastar/search-v1.twig
-                    </span>
-                </div>
+                <pre id="debugger" class="whitespace-pre-line bg-yellow-400">
+                    debugging info will appear here from _datastar/search-v1.twig
+                </pre>
             </div>
         </div>
     </div>

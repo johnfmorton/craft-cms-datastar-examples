@@ -1,6 +1,6 @@
 {% fragment %}
     <div id="searchResults">
-        <h2 class="text-lg font-bold">Search results</h2>
+        <h2 class="text-lg font-bold">Search results (show total)</h2>
         <ul class="list-inside list-disc mt-1">
             <li>Sample result for a search of <span class="font-bold">"{{ signals.phrase ?? '' }}"</span> in Craft CMS</li>
         </ul>
@@ -8,7 +8,7 @@
 {% endfragment %}
 
 {% fragment %}
-    <div id="debugger" class="p-5 bg-yellow-300">
+    <pre id="debugger" class="whitespace-pre-line bg-yellow-400">
         {% if signals.phrase|length %}
         Update URL query parameter to: <span
                 class="font-mono font-bold bg-gray-50 px-1 inline-block text-sm rounded-sm">phrase={{ signals.phrase| url_encode|replace({'%20': '+'}) }} </span>
@@ -16,7 +16,7 @@
         Remove the query parameter  <span
                 class="font-mono font-bold bg-gray-50 px-1 inline-block text-sm rounded-sm">phrase</span> from the URL
         {% endif %}
-    </div>
+    </pre>
 {% endfragment %}
 
 {% executescript %}

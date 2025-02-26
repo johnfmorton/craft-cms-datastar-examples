@@ -6,15 +6,19 @@
     {% set sections = "savedLinks" %}
 {% endif %}
 
-{% set results = craft.entries()
-    .search(signals.phrase)
-    .orderBy('score')
-    .section(sections)
-    .collect() %}
+{% if signals.phrase | length %}
+    {% set results = craft.entries()
+        .search(signals.phrase)
+        .orderBy('score')
+        .section(sections)
+        .collect() %}
+{% else %}
+    {% set results = [] %}
+{% endif %}
 
 {% fragment %}
     <div id="searchResults">
-
+{% if results | length %}
         <h2 class="text-lg font-bold">Search results ({{ results | length }})</h2>
         <ul class="list-none mt-1 flex flex-col space-y-2">
             {% for result in results %}
@@ -28,15 +32,16 @@
                     {% endif %}
                     </li>
             {% endfor %}
-            {% if results | length == 0 %}
-                <li>No results found for <span class="font-bold">"{{ signals.phrase ?? '' }}"</span></li>
-            {% endif %}
         </ul>
+        {% elseif signals.phrase | length %}
+            <h2 class="text-lg font-bold pb-2">Search results</h2>
+            <p class="italic">No results found for <span class="font-bold">"{{ signals.phrase ?? '' }}"</span></p>
+        {% endif %}
     </div>
 {% endfragment %}
 
 {% fragment %}
-    <div id="debugger" class="p-5 {{ isPopstateEvent =='1' ? 'bg-red-400': 'bg-yellow-400' }}">
+    <div id="debugger" class="whitespace-pre-li {{ isPopstateEvent =='1' ? 'bg-red-400': 'bg-yellow-400' }}">
         <pre>
         results | length : {{ results | length }}
    </pre>

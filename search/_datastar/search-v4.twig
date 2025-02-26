@@ -1,30 +1,32 @@
+{% if signals.phrase | length %}
 {% set results = craft.entries()
     .search(signals.phrase)
     .orderBy('score')
     .section('blog')
     .collect() %}
+{% else %}
+    {% set results = [] %}
+{% endif %}
 
 {% fragment %}
     <div id="searchResults">
+        {% if results | length %}
         <h2 class="text-lg font-bold">Search results ({{ results | length }})</h2>
         <ul class="list-inside list-disc mt-1">
             {% for result in results %}
                 <li class="ml-4">{{ result.title }} - {{ result.url }}</li>
             {% endfor %}
-            {% if results | length == 0 %}
-                <li>No results found for <span class="font-bold">"{{ signals.phrase ?? '' }}"</span></li>
-            {% endif %}
         </ul>
+        {% elseif signals.phrase | length %}
+            <h2 class="text-lg font-bold pb-2">Search results</h2>
+            <p class="italic">No results found for <span class="font-bold">"{{ signals.phrase ?? '' }}"</span></p>
+        {% endif %}
     </div>
 {% endfragment %}
 
 {% fragment %}
-    <div id="debugger" class="p-5 {{ isPopstateEvent =='1' ? 'bg-red-400': 'bg-yellow-400' }}">
-        <pre>
+    <pre id="debugger" class="whitespace-pre-line {{ isPopstateEvent =='1' ? 'bg-red-400': 'bg-yellow-400' }}">
         results | length : {{ results | length }}
-   </pre>
-
-
         {% if isPopstateEvent %}
             Triggered by history state change, don't update the history via javascript.
         {% else %}
@@ -36,7 +38,7 @@
                     class="font-mono font-bold bg-gray-50 px-1 inline-block text-sm rounded-sm">phrase</span> from the URL
             {% endif %}
         {% endif %}
-    </div>
+    </pre>
 {% endfragment %}
 
 {% executescript %}

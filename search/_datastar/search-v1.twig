@@ -8,8 +8,7 @@
 {% endfragment %}
 
 {% fragment %}
-{% dump(signals) %}
-    <pre id="debugger" class="p-5 {{ isPopstateEvent =='1' ? 'bg-red-400': 'bg-yellow-400' }}">
+    <pre id="debugger" class="whitespace-pre-line bg-yellow-400">
         {{ 'signals.phrase: "' ~ signals.phrase  ~ '"' }}
         {{ 'signals.get("phrase"): "' ~ signals.get("phrase")  ~ '"' }}
         {{ 'signals.counter: "' ~ signals.counter  ~ '"' }}
@@ -18,5 +17,5 @@
 {% endfragment %}
 
 {% executescript %}
-    console.log('This is the "executescript" section of search-v1.twig');
+    console.log('This is the "executescript" section of search-v1.twig.');
 {% endexecutescript %}
