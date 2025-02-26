@@ -29,7 +29,8 @@
     {# Include the search form #}
     <div id="container"
          data-signals="{phrase: '{{ phrase }}', searchCounter: 0, browserHistoryCounter: 0, lastPhrase: '', sections: '{{ sections }}'}">
-        <div id="wrapper" data-on-historychange="$phrase=evt.detail.phrase; $sections=evt.detail.sections; $browserHistoryCounter++;">
+        <div id="wrapper"
+             data-on-historychange="$phrase=evt.detail.phrase; $sections=evt.detail.sections; $browserHistoryCounter++;">
             <div>
                 <fieldset>
                     <legend>Search Sections</legend>
@@ -98,7 +99,8 @@
       const wrapperElement = document.getElementById('wrapper');
       document.addEventListener('DOMContentLoaded', () => {
         const searchPhrase = document.querySelector('[data-bind-phrase]');
-
+        // set focus on the search input
+        searchPhrase.focus();
         searchPhrase.addEventListener('input', (e) => {
           console.log('searchPhrase', e.target.value);
         });
@@ -133,6 +135,8 @@
         // Listen for the history change event
         wrapperElement.addEventListener('historychange', (e) => {
           console.log('historychange event heard', e), false;
+          // set focus on the search input
+          searchPhrase.focus();
         });
       });
     </script>
