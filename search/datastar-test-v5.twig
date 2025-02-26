@@ -29,7 +29,7 @@
     {# Include the search form #}
     <div id="container"
          data-signals="{phrase: '{{ phrase }}', searchCounter: 0, browserHistoryCounter: 0, lastPhrase: '', sections: '{{ sections }}'}">
-        <div id="wrapper" data-on-historychange="$phrase=evt.detail.phrase; $browserHistoryCounter++;">
+        <div id="wrapper" data-on-historychange="$phrase=evt.detail.phrase; $sections=evt.detail.sections; $browserHistoryCounter++;">
             <div>
                 <fieldset>
                     <legend>Search Sections</legend>
@@ -89,9 +89,7 @@
             </div>
 
             <pre id="debugger" class="whitespace-pre-line bg-yellow-400">
-                    <span>
                         debugging info will appear here from _datastar/search-v5.twig
-                    </span>
             </pre>
         </div>
     </div>
@@ -114,11 +112,13 @@
           const searchPhraseValue = currentUrl.searchParams.get('phrase') || '';
           // Update the input field without triggering another pushState.
           searchPhrase.value = searchPhraseValue;
+          const sections = currentUrl.searchParams.get('sections') || 0;
 
           // a new custom event that we can listen for
           const historyChangeEvent = new CustomEvent('historychange', {
             detail: {
               phrase: searchPhrase.value,
+              sections: sections,
               isPopstateEvent: true
             }
           }, false);

@@ -41,12 +41,8 @@
 {% endfragment %}
 
 {% fragment %}
-    <div id="debugger" class="whitespace-pre-li {{ isPopstateEvent =='1' ? 'bg-red-400': 'bg-yellow-400' }}">
-        <pre>
+    <pre id="debugger" class="whitespace-pre-line {{ isPopstateEvent =='1' ? 'bg-red-400': 'bg-yellow-400' }}">
         results | length : {{ results | length }}
-   </pre>
-
-
         {% if isPopstateEvent %}
             Triggered by history state change, don't update the history via javascript.
         {% else %}
@@ -58,7 +54,7 @@
                     class="font-mono font-bold bg-gray-50 px-1 inline-block text-sm rounded-sm">phrase</span> from the URL
             {% endif %}
         {% endif %}
-    </div>
+    </pre>
 {% endfragment %}
 
 {% executescript %}
