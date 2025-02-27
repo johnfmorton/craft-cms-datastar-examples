@@ -34,11 +34,13 @@
             <div>
                 <fieldset>
                     <legend>Search Sections</legend>
-
+                    {% set expression = '$phrase.trim().length && ' ~ datastar.get('_datastar/search-v5.twig', {isPopstateEvent: '0'}) ~ ' && $searchCounter++; $lastPhrase = $phrase.trim()' %}
+                    {# Ben Croker suggested that keeping things simpler is good. Here's a version without the conditional statement. #}
+                    {% set expressionVersionSimplified = '$phrase.trim().length; ' ~ datastar.get('_datastar/search-v5.twig', {isPopstateEvent: '0'}) ~ '; $searchCounter++; $lastPhrase = $phrase.trim()' %}
                     <div>
                         <label for="globalSearch">
                             <input id="globalSearch"
-                                   data-on-change__debounce.500ms="$phrase.trim().length &&{{ datastar.get('_datastar/search-v5.twig', {isPopstateEvent: '0'}) }} && $searchCounter++, $lastPhrase = $phrase.trim();"
+                                   data-on-change="{{expression}}"
                                    type="radio" data-bind-sections value="0">
                             <span>All sections</span>
                         </label>
@@ -47,7 +49,7 @@
                     <div>
                         <label for="blogPosts">
                             <input id="blogPosts"
-                                   data-on-change__debounce.500ms="$phrase.trim().length && {{ datastar.get('_datastar/search-v5.twig', {isPopstateEvent: '0'}) }} && $searchCounter++, $lastPhrase = $phrase.trim();"
+                                   data-on-change="{{expression}}"
                                    type="radio" data-bind-sections value="1">
                             <span>Blog posts</span>
                         </label>
@@ -56,7 +58,7 @@
                     <div>
                         <label for="savedLinks">
                             <input id="savedLinks"
-                                   data-on-change__debounce.500ms="$phrase.trim().length &&{{ datastar.get('_datastar/search-v5.twig', {isPopstateEvent: '0'}) }} && $searchCounter++, $lastPhrase = $phrase.trim();"
+                                   data-on-change="{{expression}}"
                                    type="radio" data-bind-sections value="2">
                             <span>Saved links</span>
                         </label>
@@ -80,13 +82,11 @@
                 <pre style="background-color: yellow" data-text="ctx.signals.JSON()"></pre>
             </div>
 
-            <div>
-                <div id="searchResults">
-                    <h2>Search results</h2>
-                    <ul>
-                        <li>results from _datastar/search-v5.twig will appear here</li>
-                    </ul>
-                </div>
+            <div id="searchResults">
+                <h2>Search results</h2>
+                <ul>
+                    <li>results from _datastar/search-v5.twig will appear here</li>
+                </ul>
             </div>
 
             <pre id="debugger" class="whitespace-pre-line bg-yellow-400">
@@ -99,6 +99,7 @@
       const wrapperElement = document.getElementById('wrapper');
       document.addEventListener('DOMContentLoaded', () => {
         const searchPhrase = document.querySelector('[data-bind-phrase]');
+
         // set focus on the search input
         searchPhrase.focus();
         searchPhrase.addEventListener('input', (e) => {
@@ -126,7 +127,7 @@
           }, false);
 
           // Dispatch the custom event twice
-          // first, to change the state of value in Datastar
+          // first, to change the state of value in DataStar
           wrapperElement.dispatchEvent(historyChangeEvent);
           // second, to trigger the search
           searchPhrase.dispatchEvent(historyChangeEvent);
