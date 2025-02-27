@@ -31,7 +31,8 @@
                            id="phrase"
                            placeholder="What are you looking for?"
                            data-bind-phrase
-                           data-on-input__debounce.500ms="{{ datastar.get('_datastar/search-v1.twig') }}"
+                           data-on-input="{{ datastar.get('_datastar/search-v1.twig') }}"
+                           {# data-on-input__debounce.200ms="{{ datastar.get('_datastar/search-v1.twig') }}" #}
                     >
                     <pre>ctx.signals:</pre>
                     <pre style="background-color: yellow" data-text="ctx.signals.JSON()"></pre>
