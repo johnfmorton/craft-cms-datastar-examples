@@ -44,13 +44,11 @@
                 <pre style="background-color: yellow" data-text="ctx.signals.JSON()"></pre>
             </div>
 
-            <div>
-                <div id="searchResults">
-                    <h2>Search results</h2>
-                    <ul>
-                        <li>results from _datastar/search-v3.twig will appear here</li>
-                    </ul>
-                </div>
+            <div id="searchResults">
+                <h2>Search results</h2>
+                <ul>
+                    <li>results from _datastar/search-v3.twig will appear here</li>
+                </ul>
             </div>
 
             <pre id="debugger" class="whitespace-pre-line bg-yellow-400">
@@ -91,7 +89,7 @@
           }, false);
 
           // Dispatch the custom event twice
-          // first, to change the state of value in Datastar
+          // first, to change the state of value in DataStar
           wrapperElement.dispatchEvent(historyChangeEvent);
           // second, to trigger the search
           searchPhrase.dispatchEvent(historyChangeEvent);
