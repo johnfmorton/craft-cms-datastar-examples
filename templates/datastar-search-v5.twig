@@ -75,7 +75,7 @@
                        placeholder="What are you looking for?"
                        data-bind-phrase
                        data-on-input__debounce.200ms="($phrase.trim() !== $lastPhrase.trim()) && {{ datastar.get('_datastar/search-v5.twig', { updateHistory: true }) }} && $searchCounter++, $lastPhrase = $phrase.trim();"
-                       data-on-load="$phrase.length >= 1 && {{ datastar.get('_datastar/search-v5.twig') }}; $lastPhrase = $phrase.trim();"
+                       data-on-load="$phrase.length >= 1 && {{ datastar.get('_datastar/search-v5.twig') }} && $searchCounter++; $lastPhrase = $phrase.trim();"
                        data-on-historychange__debounce.200ms="{{ datastar.get('_datastar/search-v5.twig', { updateHistory: false }) }}"
                 >
                 <p>You've used the search <span data-text="$searchCounter"></span> time<span
