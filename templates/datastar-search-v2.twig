@@ -20,7 +20,7 @@
 </head>
 <body>
 <div>
-    <h1>Datastar Test - v2 - url parameters</h1>
+    <h1>Datastar Test - v2: Adding url parameters</h1>
     {# Set the initial value of 'phrase' to the query parameter in the URL on page load. #}
     {% set phrase = craft.app.request.getQueryParam('phrase') ?? '' %}
     <div id="container" data-signals="{phrase: '{{ phrase }}', searchCounter: 0 }">
