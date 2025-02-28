@@ -16,6 +16,10 @@
         .whitespace-pre-line {
             white-space: pre-line;
         }
+
+        .text-blue {
+            color: rgb(20, 97, 221) /* #1461dd */;
+        }
     </style>
 </head>
 <body>
@@ -42,7 +46,7 @@
                             <input id="globalSearch"
                                    data-on-change="{{expression}}"
                                    type="radio" data-bind-sections value="0">
-                            <span>All sections</span>
+                            <span data-class="{'text-blue': ($sections == '0')}">All sections</span>
                         </label>
                     </div>
 
@@ -51,7 +55,7 @@
                             <input id="blogPosts"
                                    data-on-change="{{expression}}"
                                    type="radio" data-bind-sections value="1">
-                            <span>Blog posts</span>
+                            <span data-class="{'text-blue': ($sections == '1')}">Blog posts</span>
                         </label>
                     </div>
 
@@ -60,7 +64,7 @@
                             <input id="savedLinks"
                                    data-on-change="{{expression}}"
                                    type="radio" data-bind-sections value="2">
-                            <span>Saved links</span>
+                            <span data-class="{'text-blue': ($sections == '2')}">Saved links</span>
                         </label>
                     </div>
                 </fieldset>
