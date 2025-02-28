@@ -10,6 +10,6 @@ This repository contains example files for the [Craft CMS](https://craftcms.com/
 ## Helpful links
 
 - [Datastar Getting Started documentation](https://data-star.dev/guide/getting_started).
-- [Datastar Craft CMS plugin documentation](https://plugins.craftcms.com/datastar?craft5).
+- [Datastar Craft CMS plugin documentation](https://putyourlightson.com/plugins/datastar).
 - [Craft CMS documentation](https://craftcms.com/docs)
 - [SuperGeekery blog posts about Craft CMS](https://supergeekery.com/search?phrase=craft+cms&sections=0)
