@@ -25,37 +25,34 @@
 {% endfragment %}
 
 {% fragment %}
-    <pre id="debugger" class="whitespace-pre-line {{ isPopstateEvent =='1' ? 'bg-red-400': 'bg-yellow-400' }}">
-        results | length : {{ results | length }}
-        {% if isPopstateEvent %}
-            Triggered by history state change, don't update the history via javascript.
-        {% else %}
+    <pre id="debugger" class="whitespace-pre-line {{ updateHistory =='1' ? 'bg-yellow-400': 'bg-red-400' }}">
+        {% if updateHistory %}
             {% if signals.phrase|length %}
-                Update URL query parameter to: <span
+                Update window.history with JavaScript and change URL query parameter to: <span
                     class="font-mono font-bold bg-gray-50 px-1 inline-block text-sm rounded-sm">phrase={{ signals.phrase | trim | url_encode|replace({'%20': '+'}) }} </span>
             {% else %}
                 Remove the query parameter  <span
                     class="font-mono font-bold bg-gray-50 px-1 inline-block text-sm rounded-sm">phrase</span> from the URL
             {% endif %}
+        {% else %}
+            Triggered by browser buttons. Don't update window.history with JavaScript.
         {% endif %}
     </pre>
 {% endfragment %}
 
 {% executescript %}
-    const searchPhrase = "{{ signals.phrase ?? '' }}";
-    const isPopstateEvent = "{{ isPopstateEvent ?? null }}";
+    {% set phrase = signals.phrase|trim %}
     const url = new URL(window.location.href);
-    if (searchPhrase.trim() !== '') {
-    url.searchParams.set('phrase', searchPhrase.trim());
-    } else {
-    // Remove the query parameter if the search phrase is empty
-    url.searchParams.delete('phrase');
-    }
-    console.log('isPopstateEvent', isPopstateEvent);
-    if (isPopstateEvent === '0' || isPopstateEvent === 'null') {
-    console.log('pushing state');
-    window.history.pushState({}, '', url);
-    // Update the title of the page
-    document.title = `Search: ${searchPhrase}`;
-    }
+    {% if phrase %}
+        url.searchParams.set('phrase', '{{ phrase }}');
+    {% else %}
+        url.searchParams.delete('phrase');
+    {% endif %}
+
+    {% if updateHistory %}
+        console.log('Updating window.history with JavaScript');
+        window.history.pushState({}, '', url);
+        // Update the title of the page
+        document.title = `Search: {{ phrase }}`;
+    {% endif %}
 {% endexecutescript %}

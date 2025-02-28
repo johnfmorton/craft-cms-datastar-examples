@@ -20,19 +20,19 @@
 {% endfragment %}
 
 {% executescript %}
-    const searchPhrase = "{{ signals.phrase ?? '' }}";
+    {% set phrase = signals.phrase|trim %}
     const url = new URL(window.location.href);
 
-    if (searchPhrase.trim() !== '') {
-    url.searchParams.set('phrase', searchPhrase.trim());
-    } else {
-    // Remove the query parameter if the search phrase is empty
+    {% if phrase %}
+    url.searchParams.set("phrase", '{{ phrase }}');
+    {% else %}
+    {# Remove the query parameter if the search phrase is empty#}
     url.searchParams.delete('phrase');
-    }
+    {% endif %}
 
-    // Update the URL without triggering a page reload
+    {# Update the URL without triggering a page reload#}
     window.history.pushState({}, '', url);
 
-    // Update the title of the page
-    document.title = `Search: ${searchPhrase}`;
+    {# Update the title of the page #}
+    document.title = `Search: {{ phrase }}`;
 {% endexecutescript %}

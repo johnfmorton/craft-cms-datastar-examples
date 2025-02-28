@@ -34,15 +34,19 @@
                        id="phrase"
                        placeholder="What are you looking for?"
                        data-bind-phrase
-                       data-on-input__debounce.200ms="($phrase.trim() !== $lastPhrase.trim()) && {{ datastar.get('_datastar/search-v3.twig', {isPopstateEvent: "0"}) }} && $searchCounter++, $lastPhrase = $phrase.trim();"
+                       data-on-input__debounce.200ms="($phrase.trim() !== $lastPhrase.trim()) && {{ datastar.get('_datastar/search-v3.twig', { updateHistory: true }) }} && $searchCounter++, $lastPhrase = $phrase.trim();"
                        data-on-load="$phrase.length >= 1 && {{ datastar.get('_datastar/search-v3.twig') }}; $lastPhrase = $phrase.trim();"
-                       data-on-historychange__debounce.500ms="{{ datastar.get('_datastar/search-v3.twig', {isPopstateEvent: "1"}) }}"
+                       data-on-historychange__debounce.200ms="{{ datastar.get('_datastar/search-v3.twig', { updateHistory: false }) }}"
                 >
                 <p>You've used the search <span data-text="$searchCounter"></span> time<span
                             data-show="$searchCounter !== 1">s</span>.</p>
                 <pre>ctx.signals:</pre>
                 <pre style="background-color: yellow" data-text="ctx.signals.JSON()"></pre>
             </div>
+
+            <pre id="debugger" class="whitespace-pre-line bg-yellow-400">
+                        debugging info will appear here from _datastar/search-v3.twig
+            </pre>
 
             <div id="searchResults">
                 <h2>Search results</h2>
@@ -51,9 +55,7 @@
                 </ul>
             </div>
 
-            <pre id="debugger" class="whitespace-pre-line bg-yellow-400">
-                        debugging info will appear here from _datastar/search-v3.twig
-            </pre>
+
         </div>
     </div>
 
@@ -69,13 +71,10 @@
         searchPhrase.focus();
 
         window.addEventListener('popstate', (event) => {
-          isPopstateEvent = true;
-
           // When the browser navigates back or forward,
           // the current URL already reflects the desired state.
           const currentUrl = new URL(window.location.href);
           const searchPhraseValue = currentUrl.searchParams.get('phrase') || '';
-
 
           // Update the input field without triggering another pushState.
           searchPhrase.value = searchPhraseValue;
@@ -84,7 +83,7 @@
           const historyChangeEvent = new CustomEvent('historychange', {
             detail: {
               phrase: searchPhrase.value,
-              isPopstateEvent: true
+              removeMe: true
             }
           }, false);
 
