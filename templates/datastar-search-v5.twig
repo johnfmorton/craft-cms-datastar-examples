@@ -39,8 +39,6 @@
                 <fieldset>
                     <legend>Search Sections</legend>
                     {% set expression = '$phrase.trim().length && ' ~ datastar.get('_datastar/search-v5.twig', {isPopstateEvent: '0'}) ~ ' && $searchCounter++; $lastPhrase = $phrase.trim()' %}
-                    {# Ben Croker suggested that keeping things simpler is good. Here's a version without the conditional statement. #}
-                    {% set expressionVersionSimplified = '$phrase.trim().length; ' ~ datastar.get('_datastar/search-v5.twig', {isPopstateEvent: '0'}) ~ '; $searchCounter++; $lastPhrase = $phrase.trim()' %}
                     <div>
                         <label for="globalSearch">
                             <input id="globalSearch"
