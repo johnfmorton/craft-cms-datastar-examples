@@ -1,4 +1,5 @@
 {% if signals.phrase | length %}
+{# update the section from 'blog' to whatever section you want to search in your own Craft site #}
 {% set results = craft.entries()
     .search(signals.phrase)
     .orderBy('score')
