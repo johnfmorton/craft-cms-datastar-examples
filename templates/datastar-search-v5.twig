@@ -9,8 +9,8 @@
             background-color: rgb(248 113 113) /* #f87171 */;
         }
 
-        .bg-yellow-400 {
-            background-color: rgb(250 204 21) /* #facc15 */;
+        .bg-yellow {
+            background-color: yellow;
         }
 
         .whitespace-pre-line {
@@ -38,7 +38,7 @@
             <div>
                 <fieldset>
                     <legend>Search Sections</legend>
-                    {% set expression = '$phrase.trim().length && ' ~ datastar.get('_datastar/search-v5.twig', { updateHistory: true }) ~ ' && $searchCounter++; $lastPhrase = $phrase.trim()' %}
+                    {% set expression = '$phrase.trim().length && ' ~ datastar.get('_datastar/search-results-v5.twig', { updateHistory: true }) ~ ' && $searchCounter++; $lastPhrase = $phrase.trim()' %}
                     <div>
                         <label for="globalSearch">
                             <input id="globalSearch"
@@ -74,24 +74,25 @@
                        id="phrase"
                        placeholder="What are you looking for?"
                        data-bind-phrase
-                       data-on-input__debounce.200ms="($phrase.trim() !== $lastPhrase.trim()) && {{ datastar.get('_datastar/search-v5.twig', { updateHistory: true }) }} && $searchCounter++, $lastPhrase = $phrase.trim();"
-                       data-on-load="$phrase.length >= 1 && {{ datastar.get('_datastar/search-v5.twig') }} && $searchCounter++; $lastPhrase = $phrase.trim();"
-                       data-on-historychange__debounce.200ms="{{ datastar.get('_datastar/search-v5.twig', { updateHistory: false }) }}"
+                       data-on-input__debounce.200ms="($phrase.trim() !== $lastPhrase.trim()) && {{ datastar.get('_datastar/search-results-v5.twig', { updateHistory: true }) }} && $searchCounter++, $lastPhrase = $phrase.trim();"
+                       data-on-load="$phrase.length >= 1 && {{ datastar.get('_datastar/search-results-v5.twig') }} && $searchCounter++; $lastPhrase = $phrase.trim();"
+                       data-on-historychange__debounce.200ms="{{ datastar.get('_datastar/search-results-v5.twig', { updateHistory: false }) }}"
                 >
                 <p>You've used the search <span data-text="$searchCounter"></span> time<span
                             data-show="$searchCounter !== 1">s</span>.</p>
-                <pre>ctx.signals:</pre>
-                <pre style="background-color: yellow" data-text="ctx.signals.JSON()"></pre>
+                <h2>ctx.signals:</h2>
+                <pre class="whitespace-pre-line bg-yellow" data-text="ctx.signals.JSON()"></pre>
             </div>
 
-            <pre id="debugger" class="whitespace-pre-line bg-yellow-400">
-                        debugging info will appear here from _datastar/search-v5.twig
+            <h2>Debugger</h2>
+            <pre id="debugger" class="whitespace-pre-line bg-yellow">
+                        debugging info will appear here from _datastar/search-results-v5.twig
             </pre>
 
             <div id="searchResults">
                 <h2>Search results</h2>
                 <ul>
-                    <li>results from _datastar/search-v5.twig will appear here</li>
+                    <li>results from _datastar/search-results-v5.twig will appear here</li>
                 </ul>
             </div>
 
