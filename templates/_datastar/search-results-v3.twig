@@ -15,7 +15,7 @@
                 Update window.history with JavaScript and change URL query parameter to: <span
                     class="font-mono font-bold bg-gray-50 px-1 inline-block text-sm rounded-sm">phrase={{ signals.phrase | trim | url_encode|replace({'%20': '+'}) }} </span>
             {% else %}
-                Remove the query parameter  <span
+                Remove the query parameter <span
                     class="font-mono font-bold bg-gray-50 px-1 inline-block text-sm rounded-sm">phrase</span> from the URL
             {% endif %}
         {% else %}
