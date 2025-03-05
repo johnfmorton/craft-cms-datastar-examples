@@ -72,7 +72,7 @@
           // the current URL already reflects the desired state.
           const currentUrl = new URL(window.location.href);
           const searchPhraseValue = currentUrl.searchParams.get('phrase') || '';
-          // Update the input field without triggering another pushState.
+          // Update the input field value, which is bound to the Datastar signal
           searchPhrase.value = searchPhraseValue;
 
           // a new custom event that we can listen for
