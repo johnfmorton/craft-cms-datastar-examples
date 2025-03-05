@@ -81,8 +81,7 @@
           // a new custom event that we can listen for
           const historyChangeEvent = new CustomEvent('historychange', {
             detail: {
-              phrase: searchPhrase.value,
-              isPopstateEvent: true
+              phrase: searchPhrase.value
             }
           }, false);
 
