@@ -25,43 +25,40 @@
     {# Set the initial value of 'phrase' to the query parameter in the URL on page load. #}
     {% set phrase = craft.app.request.getQueryParam('phrase') ?? '' %}
     <div id="container"
-         data-signals="{phrase: '{{ phrase }}', searchCounter: 0, browserHistoryCounter: 0, lastPhrase: '' }">
-        <div id="wrapper" data-on-historychange="$phrase=evt.detail.phrase; $browserHistoryCounter++;">
-            <div>
-                <label for="phrase">Enter a phrase</label>
-                <input type="text"
-                       name="phrase"
-                       id="phrase"
-                       placeholder="What are you looking for?"
-                       data-bind-phrase
-                       data-on-input__debounce.200ms="($phrase.trim() !== $lastPhrase.trim()) && {{ datastar.get('_datastar/search-results-v3.twig', { updateHistory: true }) }} && $searchCounter++, $lastPhrase = $phrase.trim();"
-                       data-on-load="$phrase.length >= 1 && {{ datastar.get('_datastar/search-results-v3.twig') }} && $searchCounter++; $lastPhrase = $phrase.trim();"
-                       data-on-historychange__debounce.200ms="{{ datastar.get('_datastar/search-results-v3.twig', { updateHistory: false }) }}"
-                >
-                <p>You've used the search <span data-text="$searchCounter"></span> time<span
-                            data-show="$searchCounter !== 1">s</span>.</p>
-                <h2>ctx.signals:</h2>
-                <pre class="whitespace-pre-line bg-yellow" data-text="ctx.signals.JSON()"></pre>
-            </div>
+         data-signals="{phrase: '{{ phrase }}', searchCounter: 0, browserHistoryCounter: 0, lastPhrase: '' }"
+         data-on-historychange="$phrase=evt.detail.phrase; $browserHistoryCounter++;">
+        <div>
+            <label for="phrase">Enter a phrase</label>
+            <input type="text"
+                   name="phrase"
+                   id="phrase"
+                   placeholder="What are you looking for?"
+                   data-bind-phrase
+                   data-on-input__debounce.200ms="($phrase.trim() !== $lastPhrase.trim()) && {{ datastar.get('_datastar/search-results-v3.twig', { updateHistory: true }) }} && $searchCounter++, $lastPhrase = $phrase.trim();"
+                   data-on-load="$phrase.length >= 1 && {{ datastar.get('_datastar/search-results-v3.twig') }} && $searchCounter++; $lastPhrase = $phrase.trim();"
+                   data-on-historychange__debounce.200ms="{{ datastar.get('_datastar/search-results-v3.twig', { updateHistory: false }) }}"
+            >
+            <p>You've used the search <span data-text="$searchCounter"></span> time<span
+                        data-show="$searchCounter !== 1">s</span>.</p>
+            <h2>ctx.signals:</h2>
+            <pre class="whitespace-pre-line bg-yellow" data-text="ctx.signals.JSON()"></pre>
+        </div>
 
-            <h2>Debugger</h2>
-            <pre id="debugger" class="whitespace-pre-line bg-yellow">
-                        debugging info will appear here from _datastar/search-results-v3.twig
-            </pre>
+        <h2>Debugger</h2>
+        <pre id="debugger" class="whitespace-pre-line bg-yellow">
+            debugging info will appear here from _datastar/search-results-v3.twig
+        </pre>
 
-            <div id="searchResults">
-                <h2>Search results</h2>
-                <ul>
-                    <li>results from _datastar/search-results-v3.twig will appear here</li>
-                </ul>
-            </div>
-
-
+        <div id="searchResults">
+            <h2>Search results</h2>
+            <ul>
+                <li>results from _datastar/search-results-v3.twig will appear here</li>
+            </ul>
         </div>
     </div>
 
     <script>
-      const wrapperElement = document.getElementById('wrapper');
+      const container = document.getElementById('container');
       document.addEventListener('DOMContentLoaded', () => {
         const searchPhrase = document.querySelector('[data-bind-phrase]');
 
@@ -83,19 +80,19 @@
           // a new custom event that we can listen for
           const historyChangeEvent = new CustomEvent('historychange', {
             detail: {
-              phrase: searchPhrase.value,
+              phrase: searchPhrase.value
             }
           }, false);
 
           // Dispatch the custom event twice
           // first, to change the state of value in DataStar
-          wrapperElement.dispatchEvent(historyChangeEvent);
+          container.dispatchEvent(historyChangeEvent);
           // second, to trigger the search
           searchPhrase.dispatchEvent(historyChangeEvent);
         });
 
         // Listen for the history change event
-        wrapperElement.addEventListener('historychange', (e) => {
+        container.addEventListener('historychange', (e) => {
           console.log('historychange event heard', e), false;
         });
       });
