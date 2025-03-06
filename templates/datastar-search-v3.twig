@@ -61,9 +61,6 @@
       document.addEventListener('DOMContentLoaded', () => {
         const searchPhrase = document.querySelector('[data-bind-phrase]');
 
-        searchPhrase.addEventListener('input', (e) => {
-          console.log('searchPhrase', e.target.value);
-        });
         // set focus on the search input
         searchPhrase.focus();
 
