@@ -1,6 +1,8 @@
 {# In my example, I search within two sections: 'blog' and 'savedLinks'.
 You will need to update the section names to match your own Craft site. #}
+{# Default searching both sections #}
 {% set sections = ['blog','savedLinks'] %}
+{# Only reset the selection if it is one of the expected values #}
 {% if signals.sections == '1' %}
     {% set sections = "blog" %}
 {% endif %}
