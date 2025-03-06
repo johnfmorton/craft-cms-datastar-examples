@@ -25,8 +25,7 @@
     {# Set the initial value of 'phrase' to the query parameter in the URL on page load. #}
     {% set phrase = craft.app.request.getQueryParam('phrase') ?? '' %}
     <div id="container"
-         data-signals="{phrase: '{{ phrase }}', searchCounter: 0, browserHistoryCounter: 0, lastPhrase: '' }"
-         data-on-historychange="$phrase=evt.detail.phrase; $browserHistoryCounter++;">
+         data-signals="{phrase: '{{ phrase }}', searchCounter: 0, browserHistoryCounter: 0, lastPhrase: '' }">
         <div>
             <label for="phrase">Enter a phrase</label>
             <input type="text"
@@ -36,6 +35,7 @@
                    data-bind-phrase
                    data-on-input__debounce.200ms="($phrase.trim() !== $lastPhrase.trim()) && {{ datastar.get('_datastar/search-results-v3.twig', { updateHistory: true }) }} && $searchCounter++, $lastPhrase = $phrase.trim();"
                    data-on-load="$phrase.length >= 1 && {{ datastar.get('_datastar/search-results-v3.twig') }} && $searchCounter++; $lastPhrase = $phrase.trim();"
+                   data-on-historychange="$phrase=evt.detail.phrase; $browserHistoryCounter++;"
                    data-on-historychange__debounce.200ms="{{ datastar.get('_datastar/search-results-v3.twig', { updateHistory: false }) }}"
             >
             <p>You've used the search <span data-text="$searchCounter"></span> time<span
@@ -79,10 +79,12 @@
 
           // a new custom event that we can listen for
           const historyChangeEvent = new CustomEvent('historychange', {
-              detail: { phrase: searchPhrase.value }
+            detail: {
+              phrase: searchPhrase.value
+            }
           });
 
-          // Dispatch the custom event on the search input, which will bubble up to the container
+          // Dispatch the custom event on the search input
           searchPhrase.dispatchEvent(historyChangeEvent);
         });
       });

@@ -33,7 +33,7 @@
     {# Include the search form #}
     <div id="container"
          data-signals="{phrase: '{{ phrase }}', searchCounter: 0, browserHistoryCounter: 0, lastPhrase: '', sections: '{{ sections }}'}"
-         data-on-historychange="$phrase=evt.detail.phrase; $sections=evt.detail.sections; $browserHistoryCounter++;">
+    >
 
         <div>
             <fieldset>
@@ -76,6 +76,7 @@
                    data-bind-phrase
                    data-on-input__debounce.200ms="($phrase.trim() !== $lastPhrase.trim()) && {{ datastar.get('_datastar/search-results-v5.twig', { updateHistory: true }) }} && $searchCounter++, $lastPhrase = $phrase.trim();"
                    data-on-load="$phrase.length >= 1 && {{ datastar.get('_datastar/search-results-v5.twig') }} && $searchCounter++; $lastPhrase = $phrase.trim();"
+                   data-on-historychange="$phrase=evt.detail.phrase; $sections=evt.detail.sections; $browserHistoryCounter++;"
                    data-on-historychange__debounce.200ms="{{ datastar.get('_datastar/search-results-v5.twig', { updateHistory: false }) }}"
             >
             <p>You've used the search <span data-text="$searchCounter"></span> time<span
@@ -104,10 +105,6 @@
 
         // set focus on the search input
         searchPhrase.focus();
-        searchPhrase.addEventListener('input', (e) => {
-          console.log('searchPhrase', e.target.value);
-        });
-
         window.addEventListener('popstate', (event) => {
           // When the browser navigates back or forward,
           // the current URL already reflects the desired state.
@@ -119,10 +116,13 @@
 
           // a new custom event that we can listen for
           const historyChangeEvent = new CustomEvent('historychange', {
-              detail: { phrase: searchPhrase.value }
+            detail: {
+              phrase: searchPhrase.value,
+              sections: sections
+            }
           });
 
-          // Dispatch the custom event on the search input, which will bubble up to the container
+          // Dispatch the custom event on the search input
           searchPhrase.dispatchEvent(historyChangeEvent);
         });
 
