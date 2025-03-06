@@ -35,8 +35,7 @@
                    data-bind-phrase
                    data-on-input__debounce.200ms="($phrase.trim() !== $lastPhrase.trim()) && {{ datastar.get('_datastar/search-results-v3.twig', { updateHistory: true }) }} && $searchCounter++, $lastPhrase = $phrase.trim();"
                    data-on-load="$phrase.length >= 1 && {{ datastar.get('_datastar/search-results-v3.twig') }} && $searchCounter++; $lastPhrase = $phrase.trim();"
-                   data-on-historychange="$phrase=evt.detail.phrase; $browserHistoryCounter++;"
-                   data-on-historychange__debounce.200ms="{{ datastar.get('_datastar/search-results-v3.twig', { updateHistory: false }) }}"
+                   data-on-historychange="$phrase=evt.detail.phrase; $browserHistoryCounter++; {{ datastar.get('_datastar/search-results-v3.twig', { updateHistory: false }) }}"
             >
             <p>You've used the search <span data-text="$searchCounter"></span> time<span
                         data-show="$searchCounter !== 1">s</span>.</p>
