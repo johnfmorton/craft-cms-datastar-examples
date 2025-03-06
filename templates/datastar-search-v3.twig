@@ -79,15 +79,10 @@
 
           // a new custom event that we can listen for
           const historyChangeEvent = new CustomEvent('historychange', {
-            detail: {
-              phrase: searchPhrase.value
-            }
-          }, false);
+              detail: { phrase: searchPhrase.value }
+          });
 
-          // Dispatch the custom event twice
-          // first, to change the state of value in DataStar
-          container.dispatchEvent(historyChangeEvent);
-          // second, to trigger the search
+          // Dispatch the custom event on the search input, which will bubble up to the container
           searchPhrase.dispatchEvent(historyChangeEvent);
         });
 
