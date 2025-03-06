@@ -85,11 +85,6 @@
           // Dispatch the custom event on the search input, which will bubble up to the container
           searchPhrase.dispatchEvent(historyChangeEvent);
         });
-
-        // Listen for the history change event
-        container.addEventListener('historychange', (e) => {
-          console.log('historychange event heard', e), false;
-        });
       });
     </script>
 </div>
