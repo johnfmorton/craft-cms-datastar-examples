@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -20,12 +20,11 @@
 </head>
 <body>
 <div>
-    <h1>Datastar Test - v3: Custom events added to work with browser
-        history</h1>
+    <h1>Datastar Test - v3: Custom events added to work with browser history</h1>
     {# Set the initial value of 'phrase' to the query parameter in the URL on page load. #}
     {% set phrase = craft.app.request.getQueryParam('phrase') ?? '' %}
     <div id="container"
-         data-signals="{phrase: '{{ phrase }}', searchCounter: 0, browserHistoryCounter: 0, lastPhrase: '' }">
+         data-signals="{{ {phrase: phrase, searchCounter: 0, browserHistoryCounter: 0, lastPhrase: '' }|json_encode }}">
         <div>
             <label for="phrase">Enter a phrase</label>
             <input type="text"
@@ -33,20 +32,20 @@
                    id="phrase"
                    placeholder="What are you looking for?"
                    data-bind-phrase
-                   data-on-input__debounce.200ms="($phrase.trim() !== $lastPhrase.trim()) && {{ datastar.get('_datastar/search-results-v3.twig', { updateHistory: true }) }} && $searchCounter++, $lastPhrase = $phrase.trim();"
-                   data-on-load="$phrase.length >= 1 && {{ datastar.get('_datastar/search-results-v3.twig') }} && $searchCounter++; $lastPhrase = $phrase.trim();"
-                   data-on-historychange="$phrase=evt.detail.phrase; $browserHistoryCounter++; {{ datastar.get('_datastar/search-results-v3.twig', { updateHistory: false }) }}"
+                   data-on-input__debounce.200ms="($phrase.trim() !== $lastPhrase.trim()) && {{ datastar.get( '_datastar/search-results-v3.twig',{    updateHistory: true} ) }} && $searchCounter++, $lastPhrase = $phrase.trim();"
+                   data-on-load="$phrase.length >= 1 && {{ datastar.get('_datastar/search-results-v3.twig'    ) }} && $searchCounter++; $lastPhrase = $phrase.trim();"
+                   data-on-historychange="$phrase=evt.detail.phrase; $browserHistoryCounter++; {{ datastar.get('_datastar/search-results-v3.twig',{    updateHistory: false}    ) }}"
             >
             <p>You've used the search <span data-text="$searchCounter"></span> time<span
                         data-show="$searchCounter !== 1">s</span>.</p>
-            <h2>ctx.signals:</h2>
-            <pre class="whitespace-pre-line bg-yellow" data-text="ctx.signals.JSON()"></pre>
+
+            <h2>data-json-signals:</h2>
+            <pre class="whitespace-pre-line bg-yellow" data-json-signals></pre>
+
+            <h2>Debugger</h2>
+            <pre id="debugger" class="whitespace-pre-line bg-yellow">debugging info will appear here from _datastar/search-results-v3.twig</pre>
         </div>
 
-        <h2>Debugger</h2>
-        <pre id="debugger" class="whitespace-pre-line bg-yellow">
-            debugging info will appear here from _datastar/search-results-v3.twig
-        </pre>
 
         <div id="searchResults">
             <h2>Search results</h2>
@@ -55,36 +54,39 @@
             </ul>
         </div>
     </div>
-
-    <script>
-      const container = document.getElementById('container');
-      document.addEventListener('DOMContentLoaded', () => {
-        const searchPhrase = document.querySelector('[data-bind-phrase]');
-
-        // set focus on the search input
-        searchPhrase.focus();
-
-        window.addEventListener('popstate', (event) => {
-          // When the browser navigates back or forward,
-          // the current URL already reflects the desired state.
-          const currentUrl = new URL(window.location.href);
-          const searchPhraseValue = currentUrl.searchParams.get('phrase') || '';
-
-          // Update the input field value, which is bound to the Datastar signal
-          searchPhrase.value = searchPhraseValue;
-
-          // a new custom event that we can listen for
-          const historyChangeEvent = new CustomEvent('historychange', {
-            detail: {
-              phrase: searchPhrase.value
-            }
-          });
-
-          // Dispatch the custom event on the search input
-          searchPhrase.dispatchEvent(historyChangeEvent);
-        });
-      });
-    </script>
 </div>
+<script>
+
+  let url; // define the URL variable to be used later inside the datastar template called during the search process. That JS is inserted and then removed after execution by Datastar.
+
+  const container = document.getElementById('container');
+  document.addEventListener('DOMContentLoaded', () => {
+    const searchPhrase = document.querySelector('[data-bind-phrase]');
+
+    // set focus on the search input
+    searchPhrase.focus();
+
+    window.addEventListener('popstate', (event) => {
+      // When the browser navigates back or forward,
+      // the current URL already reflects the desired state.
+      const currentUrl = new URL(window.location.href);
+      const searchPhraseValue = currentUrl.searchParams.get('phrase') || '';
+
+      // Update the input field value, which is bound to the Datastar signal
+      searchPhrase.value = searchPhraseValue;
+
+      // a new custom event that we can listen for
+      const historyChangeEvent = new CustomEvent('historychange', {
+        detail: {
+          phrase: searchPhrase.value
+        }
+      });
+
+      // Dispatch the custom event on the search input
+      searchPhrase.dispatchEvent(historyChangeEvent);
+    });
+  });
+</script>
+
 </body>
 </html>

@@ -21,7 +21,7 @@
 <body>
 <div>
     <h1>Datastar Test - v1: Basic search</h1>
-    <div id="container" data-signals="{ phrase: '', counter: 42 }">
+    <div id="container" data-signals="{{ { phrase: '', counter: 42 }|json_encode }}">
         <div id="wrapper">
             <div>
                 <div>
@@ -31,11 +31,10 @@
                            id="phrase"
                            placeholder="What are you looking for?"
                            data-bind-phrase
-                           {# data-on-input="{{ datastar.get('_datastar/search-results-v1.twig') }}"#}
                            data-on-input__debounce.200ms="{{ datastar.get('_datastar/search-results-v1.twig') }}"
                     >
-                    <h2>ctx.signals:</h2>
-                    <pre class="whitespace-pre-line bg-yellow" data-text="ctx.signals.JSON()"></pre>
+                    <h2>data-json-signals:</h2>
+                    <pre class="whitespace-pre-line bg-yellow" data-json-signals></pre>
                 </div>
 
                 <h2>Debugger</h2>
@@ -55,7 +54,7 @@
     </div>
     <script>
       document.addEventListener('DOMContentLoaded', () => {
-        console.log('DOM fully loaded and parsed');
+        console.log('DOM fully loaded and parsed in search v1');
       });
     </script>
 </div>

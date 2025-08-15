@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -28,13 +28,11 @@
 
     {# Set the initial value of 'phrase' to the query parameter in the URL on page load. #}
     {% set phrase = craft.app.request.getQueryParam('phrase') ?? '' %}
-    {% set sections = craft.app.request.getQueryParam('sections') ?? 0 %}
+    {% set sections = craft.app.request.getQueryParam('sections') ?? '0' %}
 
     {# Include the search form #}
     <div id="container"
-         data-signals="{phrase: '{{ phrase }}', searchCounter: 0, browserHistoryCounter: 0, lastPhrase: '', sections: '{{ sections }}'}"
-    >
-
+         data-signals="{{ {phrase: phrase, searchCounter: 0, browserHistoryCounter: 0, lastPhrase: '', sections: sections }|json_encode }}">
         <div>
             <fieldset>
                 <legend>Search Sections</legend>
@@ -43,7 +41,9 @@
                     <label for="globalSearch">
                         <input id="globalSearch"
                                data-on-change="{{ expression }}"
-                               type="radio" data-bind-sections value="0">
+                               type="radio"
+                               data-bind-sections
+                               value="0">
                         {# We bind the text-blue class here to give the user additional feedback on the active selection #}
                         <span data-class="{'text-blue': ($sections == '0')}">All sections</span>
                     </label>
@@ -53,7 +53,9 @@
                     <label for="blogPosts">
                         <input id="blogPosts"
                                data-on-change="{{ expression }}"
-                               type="radio" data-bind-sections value="1">
+                               type="radio"
+                               data-bind-sections
+                               value="1">
                         <span data-class="{'text-blue': ($sections == '1')}">Blog posts</span>
                     </label>
                 </div>
@@ -62,7 +64,9 @@
                     <label for="savedLinks">
                         <input id="savedLinks"
                                data-on-change="{{ expression }}"
-                               type="radio" data-bind-sections value="2">
+                               type="radio"
+                               data-bind-sections
+                               value="2">
                         <span data-class="{'text-blue': ($sections == '2')}">Saved links</span>
                     </label>
                 </div>
@@ -80,15 +84,14 @@
                    data-on-historychange="$phrase=evt.detail.phrase; $sections=evt.detail.sections; $browserHistoryCounter++; {{ datastar.get('_datastar/search-results-v5.twig', { updateHistory: false }) }}"
             >
             <p>You've used the search <span data-text="$searchCounter"></span> time<span
-                        data-show="$searchCounter !== 1">s</span>.</p>
-            <h2>ctx.signals:</h2>
-            <pre class="whitespace-pre-line bg-yellow" data-text="ctx.signals.JSON()"></pre>
+                        data-show="$searchCounter !== 1">s</span>.
+            </p>
+            <h2>data-json-signals:</h2>
+            <pre class="whitespace-pre-line bg-yellow" data-json-signals></pre>
         </div>
 
         <h2>Debugger</h2>
-        <pre id="debugger" class="whitespace-pre-line bg-yellow">
-                        debugging info will appear here from _datastar/search-results-v5.twig
-            </pre>
+        <pre id="debugger" class="whitespace-pre-line bg-yellow">debugging info will appear here from _datastar/search-results-v5.twig</pre>
 
         <div id="searchResults">
             <h2>Search results</h2>
@@ -99,6 +102,7 @@
     </div>
 
     <script>
+      let url;
       const container = document.getElementById('container');
       document.addEventListener('DOMContentLoaded', () => {
         const searchPhrase = document.querySelector('[data-bind-phrase]');
@@ -128,8 +132,7 @@
 
         // Listen for the history change event
         container.addEventListener('historychange', (e) => {
-          console.log('historychange event heard', e), false;
-          // set focus on the search input
+          console.log('historychange event heard', e), false; // set focus on the search input
           searchPhrase.focus();
         });
       });

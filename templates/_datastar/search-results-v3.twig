@@ -1,32 +1,43 @@
 {% set phrase = signals.phrase|trim %}
-{% fragment %}
+{% patchelements %}
     <div id="searchResults">
-        <h2 class="text-lg font-bold">Search results (show total)</h2>
+        <h2 class="text-lg font-bold">Search results (total # will go here)</h2>
         <ul class="list-inside list-disc mt-1">
-            <li>Sample result for a search of <span class="font-bold">"{{ signals.phrase ?? '' }}"</span> in Craft CMS</li>
+            <li>Sample result for a search of <span class="font-bold">"{{ signals.phrase ?? '' }}"</span> in Craft CMS
+            </li>
         </ul>
     </div>
-{% endfragment %}
+{% endpatchelements %}
 
-{% fragment %}
-    <pre id="debugger" class="whitespace-pre-line {{ updateHistory =='1' ? 'bg-yellow': 'bg-red-400' }}">
+{% patchelements %}
+    <pre id="debugger" class="whitespace-pre-line {{ updateHistory == '1' ? 'bg-yellow' : 'bg-red-400' }}">
         {% if updateHistory %}
-            {% if signals.phrase|length %}
-                Update window.history with JavaScript and change URL query parameter to: <span
-                    class="font-mono font-bold bg-gray-50 px-1 inline-block text-sm rounded-sm">phrase={{ signals.phrase | trim | url_encode|replace({'%20': '+'}) }} </span>
+        {% if signals.phrase|length %}
+            Update window.history with JavaScript and change URL query parameter to: <span
+                class="font-mono font-bold bg-gray-50 px-1 inline-block text-sm rounded-sm"
+        >phrase={{ signals.phrase
+            |trim
+            |url_encode
+            |replace({
+                '%20': '+'
+            }) }}
+			</span>
+{% else %}
+            Remove the query parameter <span
+                    class="font-mono font-bold bg-gray-50 px-1 inline-block text-sm rounded-sm">
+				phrase
+			</span> from the URL{% endif %}
             {% else %}
-                Remove the query parameter <span
-                    class="font-mono font-bold bg-gray-50 px-1 inline-block text-sm rounded-sm">phrase</span> from the URL
-            {% endif %}
-        {% else %}
-            Don't update window.history with JavaScript. (Triggered by browser buttons, reload, etc.)
+                Don't update window.history with JavaScript. (i.e. triggered by browser back or forward button.)
         {% endif %}
-    </pre>
-{% endfragment %}
+</pre>
+{% endpatchelements %}
 
 {% executescript %}
     {% set phrase = signals.phrase|trim %}
-    const url = new URL(window.location.href);
+
+    url = new URL(window.location.href);
+
     {% if phrase %}
         url.searchParams.set('phrase', '{{ phrase }}');
     {% else %}

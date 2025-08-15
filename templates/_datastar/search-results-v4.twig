@@ -1,15 +1,15 @@
 {% if signals.phrase | length %}
-{# update the section from 'blog' to whatever section you want to search in your own Craft site #}
-{% set results = craft.entries()
-    .search(signals.phrase)
-    .orderBy('score')
-    .section('blog')
-    .collect() %}
+    {# update the section from 'blog' to whatever section you want to search in your own Craft site #}
+    {% set results = craft.entries()
+        .search(signals.phrase)
+        .orderBy('score')
+        .section('blog')
+        .collect() %}
 {% else %}
     {% set results = [] %}
 {% endif %}
 
-{% fragment %}
+{% patchelements %}
     <div id="searchResults">
         {% if results | length %}
         <h2 class="text-lg font-bold">Search results ({{ results | length }})</h2>
@@ -19,13 +19,13 @@
             {% endfor %}
         </ul>
         {% elseif signals.phrase | length %}
-            <h2 class="text-lg font-bold pb-2">Search results</h2>
-            <p class="italic">No results found for <span class="font-bold">"{{ signals.phrase ?? '' }}"</span></p>
+        <h2 class="text-lg font-bold pb-2">Search results</h2>
+        <p class="italic">No results found for <span class="font-bold">"{{ signals.phrase ?? '' }}"</span></p>
         {% endif %}
     </div>
-{% endfragment %}
+{% endpatchelements %}
 
-{% fragment %}
+{% patchelements %}
     <pre id="debugger" class="whitespace-pre-line {{ updateHistory =='1' ? 'bg-yellow': 'bg-red-400' }}">
         {% if updateHistory %}
             {% if signals.phrase|length %}
@@ -36,14 +36,14 @@
                     class="font-mono font-bold bg-gray-50 px-1 inline-block text-sm rounded-sm">phrase</span> from the URL
             {% endif %}
         {% else %}
-            Don't update window.history with JavaScript. (Triggered by browser buttons, reload, etc.)
+            Don't update window.history with JavaScript. (i.e. triggered by browser back or forward button.)
         {% endif %}
     </pre>
-{% endfragment %}
+{% endpatchelements %}
 
 {% executescript %}
     {% set phrase = signals.phrase|trim %}
-    const url = new URL(window.location.href);
+    url = new URL(window.location.href);
     {% if phrase %}
         url.searchParams.set('phrase', '{{ phrase }}');
     {% else %}
@@ -57,3 +57,4 @@
         document.title = `Search: {{ phrase }}`;
     {% endif %}
 {% endexecutescript %}
+

@@ -1,36 +1,34 @@
-{% fragment %}
+{% patchelements %}
     <div id="searchResults">
         <h2 class="text-lg font-bold">Search results (show total)</h2>
         <ul class="list-inside list-disc mt-1">
             <li>Sample result for a search of <span class="font-bold">"{{ signals.phrase ?? '' }}"</span> in Craft CMS</li>
         </ul>
     </div>
-{% endfragment %}
+{% endpatchelements %}
 
-{% fragment %}
+{% patchelements %}
     <pre id="debugger" class="whitespace-pre-line bg-yellow">
-        {% if signals.phrase|length %}
-        Update URL query parameter to: <span
-                class="font-mono font-bold bg-gray-50 px-1 inline-block text-sm rounded-sm">phrase={{ signals.phrase| url_encode|replace({'%20': '+'}) }} </span>
-        {% else %}
+    {% if signals.phrase|length %}
+        Update URL query parameter to: <span class="font-mono font-bold bg-gray-50 px-1 inline-block text-sm rounded-sm">phrase={{ signals.phrase|url_encode|replace({'%20': '+'}) }} </span>
+    {% else %}
         Remove the query parameter <span
                 class="font-mono font-bold bg-gray-50 px-1 inline-block text-sm rounded-sm">phrase</span> from the URL
-        {% endif %}
+    {% endif %}
     </pre>
-{% endfragment %}
+{% endpatchelements %}
 
 {% executescript %}
     {% set phrase = signals.phrase|trim %}
-    const url = new URL(window.location.href);
-
+    url = new URL(window.location.href);
     {% if phrase %}
     url.searchParams.set("phrase", '{{ phrase }}');
     {% else %}
-    {# Remove the query parameter if the search phrase is empty#}
+    {# Remove the query parameter if the search phrase is empty #}
     url.searchParams.delete('phrase');
     {% endif %}
 
-    {# Update the URL without triggering a page reload#}
+    {# Update the URL without triggering a page reload #}
     window.history.pushState({}, '', url);
 
     {# Update the title of the page #}
