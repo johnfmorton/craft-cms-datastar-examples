@@ -60,7 +60,9 @@ You will need to update the section names to match your own Craft site. #}
 
 {% executescript %}
     {% set phrase = signals.phrase|trim %}
+
     url = new URL(window.location.href);
+
     {% if phrase %}
         url.searchParams.set('phrase', '{{ phrase }}');
         url.searchParams.set('sections', '{{ signals.sections }}');

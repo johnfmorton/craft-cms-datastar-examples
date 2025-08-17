@@ -20,7 +20,13 @@
 
 {% executescript %}
     {% set phrase = signals.phrase|trim %}
+
+    {#
+    Note: The `url` variable is defined in the datastar-search-v2.twig template.
+    We use it to update the browser's URL without reloading the page.
+    #}
     url = new URL(window.location.href);
+
     {% if phrase %}
     url.searchParams.set("phrase", '{{ phrase }}');
     {% else %}
