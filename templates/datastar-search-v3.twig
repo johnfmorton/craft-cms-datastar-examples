@@ -24,7 +24,7 @@
     {# Set the initial value of 'phrase' to the query parameter in the URL on page load. #}
     {% set phrase = craft.app.request.getQueryParam('phrase') ?? '' %}
     <div id="container"
-         data-signals="{{ {phrase: phrase, searchCounter: 0, browserHistoryCounter: 0, lastPhrase: '' }|json_encode }}">
+         data-signals="{phrase: phrase, searchCounter: 0, browserHistoryCounter: 0, lastPhrase: '' }">
         <div>
             <label for="phrase">Enter a phrase</label>
             <input type="text"
